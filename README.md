@@ -87,19 +87,19 @@ Task added successfully!
 2. Clone this repository:
 
 ```
-git clone https://github.com/your-username/task-tracker.git
+https://github.com/yeaminhossainfuhad-cloud/Simple_Task_Tracker.git
 ```
 
 3. Navigate to the folder:
 
 ```
-cd task-tracker
+ cd .\Simple_Task_Tracker\
 ```
 
 4. Run the program:
 
 ```
-python main.py
+python simple_task_tracker.py
 ```
 
 ---
