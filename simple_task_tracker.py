@@ -1,6 +1,28 @@
+import json
+import os
+
+
 class TaskManager:
-    def __init__(self):
+    def __init__(self, filename="tasks.json"):
+        self.filename = filename
         self.tasks = []
+        self.load_tasks()
+
+    # Load tasks from JSON file
+    def load_tasks(self):
+        if os.path.exists(self.filename):
+            try:
+                with open(self.filename, "r") as file:
+                    self.tasks = json.load(file)
+            except json.JSONDecodeError:
+                self.tasks = []
+        else:
+            self.tasks = []
+
+    # Save tasks to JSON file
+    def save_tasks(self):
+        with open(self.filename, "w") as file:
+            json.dump(self.tasks, file, indent=4)
 
     # Add Task
     def add_task(self):
@@ -13,6 +35,7 @@ class TaskManager:
         }
 
         self.tasks.append(task)
+        self.save_tasks()
         print("Task added successfully!\n")
 
     # View Tasks
@@ -21,7 +44,7 @@ class TaskManager:
             print("No tasks available.\n")
             return
 
-        print("\n--- Your Tasks ---")
+        print("\nYour Tasks:")
         for index, task in enumerate(self.tasks, start=1):
             print(f"{index}. {task['title']} - {task['description']}")
         print()
@@ -34,9 +57,10 @@ class TaskManager:
 
         self.view_tasks()
         try:
-            task_num = int(input("Enter task number to delete: "))
-            if 1 <= task_num <= len(self.tasks):
-                removed = self.tasks.pop(task_num - 1)
+            choice = int(input("Enter task number to delete: "))
+            if 1 <= choice <= len(self.tasks):
+                removed = self.tasks.pop(choice - 1)
+                self.save_tasks()
                 print(f"Task '{removed['title']}' deleted successfully!\n")
             else:
                 print("Invalid task number.\n")
@@ -46,7 +70,7 @@ class TaskManager:
 
 # Main Program
 def main():
-    task_manager = TaskManager()
+    manager = TaskManager()
 
     while True:
         print("===== Task Tracker =====")
@@ -58,16 +82,16 @@ def main():
         choice = input("Enter choice: ")
 
         if choice == "1":
-            task_manager.add_task()
+            manager.add_task()
         elif choice == "2":
-            task_manager.view_tasks()
+            manager.view_tasks()
         elif choice == "3":
-            task_manager.delete_task()
+            manager.delete_task()
         elif choice == "4":
             print("Exiting... Goodbye!")
             break
         else:
-            print("Invalid choice. Please try again.\n")
+            print("Invalid choice. Try again.\n")
 
 
 if __name__ == "__main__":
